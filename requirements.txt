@@ -1,0 +1,5 @@
+connexion[flask,uvicorn]
+flask
+swagger-ui-bundle
+boto3
+python-docx
