@@ -3,7 +3,59 @@ info:
   title: 'File Comparison API'
   version: '1.0.0'
   description: 'API to upload two files and compare them'
+servers:
+  - url: https://{{HOST}}/1.0
+    description: http://127.0.0.1:8080/1.0/ui/
+  - url: /1.0
+    description: relative path example
 paths:
+  /parse:
+    post:
+      x-openapi-router-controller: api_server.controllers.text_parser_controller
+      operationId: parse_file
+      summary: 'Parse Word file and store content in DynamoDB'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: 'The Word file to parse and store in DynamoDB'
+      responses:
+        '200':
+          description: 'Status of the operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: 'Status of the operation'
+        '400':
+          description: 'Bad request'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: 'Error message'
+        '500':
+          description: 'Internal server error'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: 'Error message'
   /upload:
     post:
       x-openapi-router-controller: api_server.controllers.file_controller
