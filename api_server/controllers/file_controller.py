@@ -25,6 +25,6 @@ def upload_files():
     elif file_type == 'mosiac':
           parsed_text=compare_files(content1, content2)
     else:
-          return jsonify({'error': 'Invalid type parameter'}), 400
+          return jsonify({'error': 'Invalid type parameter'})
     
     return jsonify({'parsed_text': parsed_text}), 200
