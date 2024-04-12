@@ -37,21 +37,32 @@ def handle_method_not_allowed(request: ConnexionRequest, exception: Exception):
         body=json.dumps(response_body)
     )
 
-
+from connexion.exceptions import ProblemException
 def handle_generic_exception(exception: Exception, request: ConnexionRequest):
     """
     Custom error handler for arbitrary ServerError 500.
     This function will be invoked when a ServerError occurs.
     It returns a JSON response with the error status code, title, and detail message.
     """
-    response_body = {'error': 'Internal Server Error', 'detail': 'An unexpected error occurred'}
-    return ConnexionResponse(
-        status_code=500,
-        mimetype='application/json',
-        body=json.dumps(response_body)
-    )
+    if isinstance(exception, ProblemException):
+        # If it's a ProblemException, return the Problem JSON response
+        return jsonify(exception.to_dict()), exception.status
+    else:
+        response_body = {'error': 'Internal Server Error', 'detail': 'An unexpected error occurred'}
+        return ConnexionResponse(
+            status_code=500,
+            mimetype='application/json',
+            body=json.dumps(response_body)
+        )
 
-
+from flask import jsonify
+def handle_file_not_found(problem):
+    """
+    Sometimes, we also use it to handle cases where data is present but in an unexpected format, 
+    which may require raising a ProblemException as 
+    # ProblemException(status=400, title='Bad Request', detail='Invalid input data')
+    """
+    return jsonify(problem.to_dict()), problem.status
 
 
 def handle_problem_exception(request: ConnexionRequest, exception: Exception) -> ConnexionResponse:

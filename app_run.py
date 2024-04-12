@@ -1,6 +1,7 @@
 import connexion
-from handlers import handle_bad_request, handle_not_found,handle_method_not_allowed,handle_generic_exception,handle_problem_exception
+from handlers import handle_file_not_found, handle_bad_request, handle_not_found,handle_method_not_allowed,handle_generic_exception,handle_problem_exception
 import logging
+from connexion.exceptions import ProblemException
 
 
 
@@ -28,7 +29,9 @@ app.add_error_handler(405, handle_method_not_allowed)
 app.add_error_handler(Exception, handle_generic_exception)
 
 # #Register error handler for ProblemException
-# app.add_error_handler(FileNotFoundError, handle_problem_exception)
+#app.add_error_handler(ProblemException, handle_file_not_found)
+
+#app.add_problem_handler(handle_file_not_found)
 
 
 

@@ -19,7 +19,9 @@ def parse_file():
     #file_type = request.form['type']
     file_type = request.form.get('type')
     if not file_type:
-        raise FileNotFoundError(status=400, title='Bad Request', detail='Invalid input data') 
+        #raise FileNotFoundError(status=400, title='Bad Request', detail='Invalid input data') 
+        #raise FileNotFoundError("File parsing error: {}".format(str("test")))
+        raise ProblemException(title='Not Found', detail='Resource not found')
         #both are working
     
         #10/0 #generic error
